@@ -1,0 +1,25 @@
+name: testpipeline 
+pool: pipelinepool 
+
+trigger: none
+ 
+steps:
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'testappsc'
+      backendAzureRmResourceGroupName: 'Pipeline-rg'
+      backendAzureRmStorageAccountName: 'pipelinestrg'
+      backendAzureRmContainerName: 'testcontainer'
+      backendAzureRmKey: 'new.terraform.tfstate'
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'validate' 
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'plan'
+      environmentServiceNameAzureRM: 'testappsc'
